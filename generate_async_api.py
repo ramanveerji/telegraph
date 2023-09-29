@@ -61,7 +61,7 @@ class SyncToAsyncTransformer(cst.CSTTransformer):
         path = []
 
         a = original_node.func
-        while isinstance(a, cst.Attribute) or isinstance(a, cst.Name):
+        while isinstance(a, (cst.Attribute, cst.Name)):
             if isinstance(a, cst.Attribute):
                 path.append(a.attr.value)
             else:

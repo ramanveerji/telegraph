@@ -114,11 +114,7 @@ class HtmlToNodesParser(HTMLParser):
         self.add_str_node(chr(name2codepoint[name]))
 
     def handle_charref(self, name):
-        if name.startswith('x'):
-            c = chr(int(name[1:], 16))
-        else:
-            c = chr(int(name))
-
+        c = chr(int(name[1:], 16)) if name.startswith('x') else chr(int(name))
         self.add_str_node(c)
 
     def get_nodes(self):
@@ -208,10 +204,7 @@ class FilesOpener(object):
             if hasattr(file_or_name, 'read'):
                 f = file_or_name
 
-                if hasattr(f, 'name'):
-                    filename = f.name
-                else:
-                    filename = name
+                filename = f.name if hasattr(f, 'name') else name
             else:
                 filename = file_or_name
                 f = open(filename, 'rb')
@@ -219,9 +212,7 @@ class FilesOpener(object):
 
             mimetype = mimetypes.MimeTypes().guess_type(filename)[0]
 
-            files.append(
-                (self.key_format.format(x), ('file{}'.format(x), f, mimetype))
-            )
+            files.append((self.key_format.format(x), (f'file{x}', f, mimetype)))
 
         return files
 

@@ -27,18 +27,17 @@ class TelegraphApi:
             values["access_token"] = self.access_token
 
         response = self.session.post(
-            "https://api.graph.org/{}/{}".format(method, path), data=values
+            f"https://api.graph.org/{method}/{path}", data=values
         ).json()
 
         if response.get("ok"):
             return response["result"]
 
         error = response.get("error")
-        if isinstance(error, str) and error.startswith("FLOOD_WAIT_"):
-            retry_after = int(error.rsplit("_", 1)[-1])
-            raise RetryAfterError(retry_after)
-        else:
+        if not isinstance(error, str) or not error.startswith("FLOOD_WAIT_"):
             raise TelegraphException(error)
+        retry_after = int(error.rsplit("_", 1)[-1])
+        raise RetryAfterError(retry_after)
 
     def upload_file(self, f):
         """Upload file. NOT PART OF OFFICIAL API, USE AT YOUR OWN RISK
@@ -57,12 +56,11 @@ class TelegraphApi:
             error = response.get("error")
 
         if error:
-            if isinstance(error, str) and error.startswith("FLOOD_WAIT_"):
-                retry_after = int(error.rsplit("_", 1)[-1])
-                raise RetryAfterError(retry_after)
-            else:
+            if not isinstance(error, str) or not error.startswith("FLOOD_WAIT_"):
                 raise TelegraphException(error)
 
+            retry_after = int(error.rsplit("_", 1)[-1])
+            raise RetryAfterError(retry_after)
         return response
 
 
