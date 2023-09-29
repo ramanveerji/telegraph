@@ -9,6 +9,7 @@
 Copyright (C) 2018
 """
 
+
 try:
     from setuptools import setup
 except ImportError:
@@ -24,27 +25,19 @@ with open('README.md') as f:
 setup(
     name='telegraph',
     version=version,
-
     author='python273',
-
     author_email='telegraph@python273.pw',
     url='https://github.com/python273/telegraph',
-
     description='Telegraph API wrapper',
     long_description=long_description,
     long_description_content_type='text/markdown',
-
-    download_url='https://github.com/python273/telegraph/archive/v{}.zip'.format(
-        version
-    ),
+    download_url=f'https://github.com/python273/telegraph/archive/v{version}.zip',
     license='MIT',
-
     packages=['telegraph'],
     install_requires=['requests'],
     extras_require={
         'aio': ['httpx'],
     },
-
     classifiers=[
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
@@ -55,5 +48,5 @@ setup(
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
-    ]
+    ],
 )
